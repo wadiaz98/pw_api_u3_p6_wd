@@ -1,5 +1,7 @@
 package com.edu.uce.pw.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.uce.pw.api.repository.model.Estudiante;
@@ -40,13 +43,13 @@ public class EstudianteController {
 	@PatchMapping(path = "/actualizarParcial")
 	public void actualizarParcial(@RequestBody Estudiante e) {
 		Estudiante e2 = this.estudianteService.buscar(e.getId());
-		if(e.getNombre()!= null) {
+		if (e.getNombre() != null) {
 			e2.setNombre(e.getNombre());
 		}
-		if(e.getApellido()!= null) {
+		if (e.getApellido() != null) {
 			e2.setApellido(e.getApellido());
 		}
-		if(e.getFecha()!= null) {
+		if (e.getFecha() != null) {
 			e2.setFecha(e.getFecha());
 		}
 		this.estudianteService.actualizar(e2);
@@ -61,8 +64,14 @@ public class EstudianteController {
 
 	// GET
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar
-	@GetMapping(path = "/buscar")
-	public Estudiante buscar() {
-		return this.estudianteService.buscar(2);
+	@GetMapping(path = "/buscar/{id}")
+	public Estudiante buscar(@PathVariable Integer id) {
+		return this.estudianteService.buscar(id);
+	}
+
+	@GetMapping(path = "/genero")
+	public List<Estudiante> buscarPorGenero(@RequestParam String genero) {
+		List<Estudiante> lista = this.estudianteService.buscarPorGenero(genero);
+		return lista;
 	}
 }

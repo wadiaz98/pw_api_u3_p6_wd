@@ -1,5 +1,7 @@
 package com.edu.uce.pw.api.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -7,10 +9,11 @@ import com.edu.uce.pw.api.repository.IEstudianteRepository;
 import com.edu.uce.pw.api.repository.model.Estudiante;
 
 @Service
-public class EstudianteServiceImpl implements IEstudianteService{
+public class EstudianteServiceImpl implements IEstudianteService {
 
 	@Autowired
 	private IEstudianteRepository estudianteRepository;
+
 	@Override
 	public void guardar(Estudiante e) {
 		// TODO Auto-generated method stub
@@ -33,6 +36,12 @@ public class EstudianteServiceImpl implements IEstudianteService{
 	public void borrar(Integer id) {
 		// TODO Auto-generated method stub
 		this.estudianteRepository.eliminar(id);
+	}
+
+	@Override
+	public List<Estudiante> buscarPorGenero(String genero) {
+		// TODO Auto-generated method stub
+		return this.estudianteRepository.buscarPorGenero(genero);
 	}
 
 }
