@@ -26,21 +26,21 @@ public class EstudianteController {
 
 	// POST
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/guardar
-	@PostMapping(path = "/guardar")
+	@PostMapping
 	public void guardar(@RequestBody Estudiante e) {
 		this.estudianteService.guardar(e);
 	}
 
 	// PUT
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/actualizar
-	@PutMapping(path = "/actualizar")
+	@PutMapping
 	public void actualizar(@RequestBody Estudiante e) {
 		this.estudianteService.actualizar(e);
 	}
 
 	// PATCH
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/actualizarParcial
-	@PatchMapping(path = "/actualizarParcial")
+	@PatchMapping
 	public void actualizarParcial(@RequestBody Estudiante e) {
 		Estudiante e2 = this.estudianteService.buscar(e.getId());
 		if (e.getNombre() != null) {
@@ -64,14 +64,30 @@ public class EstudianteController {
 
 	// GET
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar
-	@GetMapping(path = "/buscar/{id}")
-	public Estudiante buscar(@PathVariable Integer id) {
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar/1/nuevo/2
+	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar/{id}/nuevo/{datro}
+	@GetMapping(path = "/buscar/{id}/nuevo/{dato}")
+	public Estudiante buscar(@PathVariable Integer id, @PathVariable String dato) {
+		System.out.println("dato:" + dato);
 		return this.estudianteService.buscar(id);
 	}
 
+	// GET
+	// http://localhost:8082/API/v1.0/Matricula/estudiantes/genero?genero=F&edad=35
 	@GetMapping(path = "/genero")
-	public List<Estudiante> buscarPorGenero(@RequestParam String genero) {
+	public List<Estudiante> buscarPorGenero(@RequestParam String genero, @RequestParam Integer edad) {
 		List<Estudiante> lista = this.estudianteService.buscarPorGenero(genero);
 		return lista;
 	}
+
+	// http://localhost:8082/API/v1.0/Matricula/estudiantes/buscarMixto/1?edad=15
+	@GetMapping(path = "/buscarMixto/{id}")
+	public Estudiante buscarMixto(@PathVariable Integer id, @RequestParam Integer edad) {
+		System.out.println("Dato: " + id);
+		System.out.println("Dato: " + edad);
+		// Aquí debes llamar al método que devuelve un Estudiante
+		// Por ejemplo:
+		return this.estudianteService.buscar(id);
+	}
+
 }
