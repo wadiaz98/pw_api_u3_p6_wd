@@ -75,24 +75,28 @@ public class EstudianteController {
 	// http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar/{id}/nuevo/{datro}
 	// Nivel 1: http://localhost:8080/API/v1.0/Matricula/estudiantes/buscar/{id}
 	@GetMapping(path = "/{id}")
-	public Estudiante buscar(@PathVariable Integer id) {
+	public Estudiante buscarPorId(@PathVariable Integer id) {
 
 		return this.estudianteService.buscar(id);
 	}
 
 	// GET
 	// http://localhost:8082/API/v1.0/Matricula/estudiantes/genero?genero=F&edad=35
+	// Nivel 1: http://localhost:8082/API/v1.0/Matricula/estudiantes/genero?genero=F
+	// #Hace
+	// alusión al parámetro de busqueda
 	@GetMapping(path = "/genero")
-	public List<Estudiante> buscarPorGenero(@RequestParam String genero, @RequestParam Integer edad) {
+	public List<Estudiante> buscarPorGenero(@RequestParam String genero) {
 		List<Estudiante> lista = this.estudianteService.buscarPorGenero(genero);
 		return lista;
 	}
 
+	// GET
 	// http://localhost:8082/API/v1.0/Matricula/estudiantes/buscarMixto/1?edad=15
-	@GetMapping(path = "/buscarMixto/{id}")
-	public Estudiante buscarMixto(@PathVariable Integer id, @RequestParam Integer edad) {
-		System.out.println("Dato: " + id);
-		System.out.println("Dato: " + edad);
+	// Nivel 1: http://localhost:8082/API/v1.0/Matricula/estudiantes/mixto/1
+	@GetMapping(path = "/mixto/{id}")
+	public Estudiante buscarMixto(@PathVariable Integer id) {
+
 		// Aquí debes llamar al método que devuelve un Estudiante
 		// Por ejemplo:
 		return this.estudianteService.buscar(id);
