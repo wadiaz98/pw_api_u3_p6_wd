@@ -1,5 +1,7 @@
 package com.edu.uce.pw.api.service;
 
+import java.util.List;
+
 import com.edu.uce.pw.api.repository.model.Materia;
 
 public interface IMateriaService {
@@ -11,5 +13,7 @@ public interface IMateriaService {
 	Materia buscar(Integer id);
 
 	void borrar(Integer id);
+	
+	List<Materia> buscarPorCredito(Integer credito);
 
 }

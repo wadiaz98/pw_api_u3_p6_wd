@@ -1,5 +1,7 @@
 package com.edu.uce.pw.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.uce.pw.api.repository.model.Materia;
@@ -19,49 +22,60 @@ import com.edu.uce.pw.api.service.IMateriaService;
 public class MateriaController {
 
 	@Autowired
-	private IMateriaService iMateriaService;
+	private IMateriaService materiaService;
 
-	// http://localhost:8080/API/v1.0/Matricula/materias/agregar
-	@PostMapping(path = "/agregar")
+	@PostMapping
 	public void agregar(@RequestBody Materia materia) {
-		this.iMateriaService.agregar(materia);
+		this.materiaService.agregar(materia);
 	}
 
-	// http://localhost:8080/API/v1.0/Matricula/materias/modificar
-	@PutMapping(path = "/modificar")
-	public void modificar(@RequestBody Materia materia) {
-		this.iMateriaService.modificar(materia);
+	@PutMapping(path = "/{id}")
+	public void modificar(@RequestBody Materia materia, @PathVariable Integer id) {
+		materia.setId(id);
+		this.materiaService.modificar(materia);
 	}
 
-	// http://localhost:8080/API/v1.0/Matricula/materias/modificarParcial
-	@PatchMapping(path = "/modificarParcial")
-	public void modificarParcial(@RequestBody Materia materia) {
-		Materia materia2 = this.iMateriaService.buscar(materia.getId());
-		if (materia.getNombre() != null) {
-			materia2.setNombre(materia.getNombre());
-		}
-		if (materia.getPrecio() != null) {
-			materia2.setPrecio(materia.getPrecio());
-		}
-		if (materia.getProfesor() != null) {
-			materia2.setProfesor(materia.getProfesor());
-		}
-
-		this.iMateriaService.modificar(materia2);
-	}
-
-	// http://localhost:8080/API/v1.0/Matricula/materias/borrar
-	@DeleteMapping(path = "/borrar/{id}")
+	@DeleteMapping(path = "/{id}")
 	public void borrar(@PathVariable Integer id) {
-		this.iMateriaService.borrar(id);
-
+		this.materiaService.borrar(id);
 	}
 
-	// http://localhost:8080/API/v1.0/Matricula/materias/encontrar
-	@GetMapping(path = "/encontrar/{id}")
-	public Materia encontrar(@PathVariable Integer id) {
-		return this.iMateriaService.buscar(id);
-
+	@GetMapping(path = "/{id}")
+	public Materia buscar(@PathVariable Integer id) {
+		return this.materiaService.buscar(id);
 	}
 
+	@GetMapping(path = "/credito")
+	public List<Materia> buscarPorGenero(@RequestParam Integer credito) {
+		List<Materia> lista = this.materiaService.buscarPorCredito(credito);
+		return lista;
+	}
+
+	// Nivel 1: http://localhost:8082/API/v1.0/Matricula/materias/mixto/1
+	@GetMapping(path = "/mixto/{id}")
+	public Materia buscarMixto(@PathVariable Integer id) {
+
+		// Aquí debes llamar al método que devuelve un Estudiante
+		// Por ejemplo:
+		return this.materiaService.buscar(id);
+	}
+
+	@PatchMapping(path = "/{id}")
+	public void actualizarParcial(@RequestBody Materia m, @PathVariable Integer id) {
+		m.setId(id);
+		Materia e2 = this.materiaService.buscar(m.getId());
+		if (m.getNombre() != null) {
+			e2.setNombre(m.getNombre());
+		}
+		if (m.getCreditos() != null) {
+			e2.setPrecio(m.getPrecio());
+		}
+		if (m.getProfesor() != null) {
+			e2.setProfesor(m.getProfesor());
+		}
+		if (m.getSemestre() != null) {
+			e2.setSemestre(m.getSemestre());
+		}
+		this.materiaService.modificar(e2);
+	}
 }
