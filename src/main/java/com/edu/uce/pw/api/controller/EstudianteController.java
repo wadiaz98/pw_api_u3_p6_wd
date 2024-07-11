@@ -3,6 +3,7 @@ package com.edu.uce.pw.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -83,7 +84,12 @@ public class EstudianteController {
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<Estudiante> buscarPorId(@PathVariable Integer id) {
 
-		return ResponseEntity.status(236).body(this.estudianteService.buscar(id));
+		// return ResponseEntity.status(236).body(this.estudianteService.buscar(id));
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_236", "Corresponde a la consulta de un recurso");
+		cabeceras.add("valor", "El que busca encuentra");
+		// return ResponseEntity.status(236).body(materia);
+		return new ResponseEntity<>(this.estudianteService.buscar(id), cabeceras, 236);
 	}
 
 	// GET

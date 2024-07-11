@@ -3,6 +3,8 @@ package com.edu.uce.pw.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,57 +27,61 @@ public class MateriaController {
 	private IMateriaService materiaService;
 
 	@PostMapping
-	public void agregar(@RequestBody Materia materia) {
+	public ResponseEntity<Materia> agregar(@RequestBody Materia materia) {
 		this.materiaService.agregar(materia);
+		return ResponseEntity.status(201).body(materia);
 	}
 
 	@PutMapping(path = "/{id}")
-	public void modificar(@RequestBody Materia materia, @PathVariable Integer id) {
+	public ResponseEntity<Materia> modificar(@RequestBody Materia materia, @PathVariable Integer id) {
 		materia.setId(id);
 		this.materiaService.modificar(materia);
+		return ResponseEntity.status(238).body(materia);
 	}
 
 	@DeleteMapping(path = "/{id}")
-	public void borrar(@PathVariable Integer id) {
+	public ResponseEntity<String> borrar(@PathVariable Integer id) {
 		this.materiaService.borrar(id);
+		return ResponseEntity.status(240).body("Borrada exitosamente");
 	}
 
 	@GetMapping(path = "/{id}")
-	public Materia buscar(@PathVariable Integer id) {
-		return this.materiaService.buscar(id);
+	public ResponseEntity<Materia> buscar(@PathVariable Integer id) {
+		Materia materia = this.materiaService.buscar(id);
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_236", "Corresponde a la consulta de un recurso");
+		// return ResponseEntity.status(236).body(materia);
+		return new ResponseEntity<>(this.materiaService.buscar(id), cabeceras, 236);
 	}
 
 	@GetMapping(path = "/credito")
-	public List<Materia> buscarPorGenero(@RequestParam Integer credito) {
+	public List<Materia> buscarPorCredito(@RequestParam Integer credito) {
 		List<Materia> lista = this.materiaService.buscarPorCredito(credito);
 		return lista;
 	}
 
-	// Nivel 1: http://localhost:8082/API/v1.0/Matricula/materias/mixto/1
 	@GetMapping(path = "/mixto/{id}")
 	public Materia buscarMixto(@PathVariable Integer id) {
-
-		// Aquí debes llamar al método que devuelve un Estudiante
-		// Por ejemplo:
 		return this.materiaService.buscar(id);
 	}
 
 	@PatchMapping(path = "/{id}")
-	public void actualizarParcial(@RequestBody Materia m, @PathVariable Integer id) {
+	public ResponseEntity<Materia> actualizarParcial(@RequestBody Materia m, @PathVariable Integer id) {
 		m.setId(id);
-		Materia e2 = this.materiaService.buscar(m.getId());
+		Materia materia = this.materiaService.buscar(m.getId());
 		if (m.getNombre() != null) {
-			e2.setNombre(m.getNombre());
+			materia.setNombre(m.getNombre());
 		}
 		if (m.getCreditos() != null) {
-			e2.setPrecio(m.getPrecio());
+			materia.setCreditos(m.getCreditos());
 		}
 		if (m.getProfesor() != null) {
-			e2.setProfesor(m.getProfesor());
+			materia.setProfesor(m.getProfesor());
 		}
 		if (m.getSemestre() != null) {
-			e2.setSemestre(m.getSemestre());
+			materia.setSemestre(m.getSemestre());
 		}
-		this.materiaService.modificar(e2);
+		this.materiaService.modificar(materia);
+		return ResponseEntity.status(239).body(materia);
 	}
 }
