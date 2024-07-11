@@ -29,29 +29,42 @@ public class MateriaController {
 	@PostMapping
 	public ResponseEntity<Materia> agregar(@RequestBody Materia materia) {
 		this.materiaService.agregar(materia);
-		return ResponseEntity.status(201).body(materia);
+
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_201", "Materia agregada correctamente");
+
+		return ResponseEntity.status(201).headers(cabeceras).body(materia);
 	}
 
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<Materia> modificar(@RequestBody Materia materia, @PathVariable Integer id) {
 		materia.setId(id);
 		this.materiaService.modificar(materia);
-		return ResponseEntity.status(238).body(materia);
+
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_238", "Materia modificada correctamente");
+
+		return ResponseEntity.status(238).headers(cabeceras).body(materia);
 	}
 
 	@DeleteMapping(path = "/{id}")
 	public ResponseEntity<String> borrar(@PathVariable Integer id) {
 		this.materiaService.borrar(id);
-		return ResponseEntity.status(240).body("Borrada exitosamente");
+
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_240", "Materia borrada exitosamente");
+
+		return ResponseEntity.status(240).headers(cabeceras).body("Borrada exitosamente");
 	}
 
 	@GetMapping(path = "/{id}")
 	public ResponseEntity<Materia> buscar(@PathVariable Integer id) {
 		Materia materia = this.materiaService.buscar(id);
+
 		HttpHeaders cabeceras = new HttpHeaders();
 		cabeceras.add("mensaje_236", "Corresponde a la consulta de un recurso");
-		// return ResponseEntity.status(236).body(materia);
-		return new ResponseEntity<>(this.materiaService.buscar(id), cabeceras, 236);
+
+		return ResponseEntity.status(236).headers(cabeceras).body(materia);
 	}
 
 	@GetMapping(path = "/credito")
@@ -82,6 +95,10 @@ public class MateriaController {
 			materia.setSemestre(m.getSemestre());
 		}
 		this.materiaService.modificar(materia);
-		return ResponseEntity.status(239).body(materia);
+
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_239", "Materia actualizada parcialmente");
+
+		return ResponseEntity.status(239).headers(cabeceras).body(materia);
 	}
 }
