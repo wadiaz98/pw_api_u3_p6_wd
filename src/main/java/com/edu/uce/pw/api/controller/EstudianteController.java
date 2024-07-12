@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,87 +25,94 @@ import com.edu.uce.pw.api.service.IEstudianteService;
 @RequestMapping(path = "/estudiantes")
 public class EstudianteController {
 	@Autowired
-    private IEstudianteService estudianteService;
+	private IEstudianteService estudianteService;
 
-    // POST
-    @PostMapping
-    public ResponseEntity<Estudiante> guardar(@RequestBody Estudiante e) {
-        this.estudianteService.guardar(e);
-        
-        HttpHeaders cabeceras = new HttpHeaders();
-        cabeceras.add("mensaje_201", "Estudiante guardado correctamente");
-        
-        return ResponseEntity.status(201).headers(cabeceras).body(e);
-    }
+	// POST
+	@PostMapping(produces = "application/xml", consumes = "application/json")
+	public ResponseEntity<Estudiante> guardar(@RequestBody Estudiante e) {
+		this.estudianteService.guardar(e);
 
-    // PUT
-    @PutMapping(path = "/{id}")
-    public ResponseEntity<Estudiante> actualizar(@RequestBody Estudiante e, @PathVariable Integer id) {
-        e.setId(id);
-        this.estudianteService.actualizar(e);
-        
-        HttpHeaders cabeceras = new HttpHeaders();
-        cabeceras.add("mensaje_238", "Estudiante actualizado correctamente");
-        
-        return ResponseEntity.status(238).headers(cabeceras).body(e);
-    }
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_201", "Estudiante guardado correctamente");
 
-    // PATCH
-    @PatchMapping(path = "/{id}")
-    public ResponseEntity<Estudiante> actualizarParcial(@RequestBody Estudiante e, @PathVariable Integer id) {
-        e.setId(id);
-        Estudiante e2 = this.estudianteService.buscar(e.getId());
-        if (e.getNombre() != null) {
-            e2.setNombre(e.getNombre());
-        }
-        if (e.getApellido() != null) {
-            e2.setApellido(e.getApellido());
-        }
-        if (e.getFecha() != null) {
-            e2.setFecha(e.getFecha());
-        }
-        this.estudianteService.actualizar(e2);
+		return ResponseEntity.status(HttpStatus.CREATED).headers(cabeceras).body(e);
+	}
 
-        HttpHeaders cabeceras = new HttpHeaders();
-        cabeceras.add("mensaje_239", "Estudiante actualizado parcialmente");
-        
-        return ResponseEntity.status(239).headers(cabeceras).body(e2);
-    }
+	// PUT
+	@PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Estudiante> actualizar(@RequestBody Estudiante e, @PathVariable Integer id) {
+		e.setId(id);
+		this.estudianteService.actualizar(e);
 
-    // DELETE
-    @DeleteMapping(path = "/{id}")
-    public ResponseEntity<String> borrar(@PathVariable Integer id) {
-        this.estudianteService.borrar(id);
-        
-        HttpHeaders cabeceras = new HttpHeaders();
-        cabeceras.add("mensaje_240", "Estudiante borrado exitosamente");
-        
-        return ResponseEntity.status(240).headers(cabeceras).body("Borrada exitosamente");
-    }
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_238", "Estudiante actualizado correctamente");
 
-    // GET by ID
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<Estudiante> buscarPorId(@PathVariable Integer id) {
-        Estudiante estudiante = this.estudianteService.buscar(id);
-        
-        HttpHeaders cabeceras = new HttpHeaders();
-        cabeceras.add("mensaje_236", "Corresponde a la consulta de un recurso");
-        cabeceras.add("valor", "El que busca encuentra");
-        
-        return ResponseEntity.status(236).headers(cabeceras).body(estudiante);
-    }
+		return ResponseEntity.status(238).headers(cabeceras).body(e);
+	}
 
-    // GET by genero
-    @GetMapping(path = "/genero")
-    public List<Estudiante> buscarPorGenero(@RequestParam String genero) {
-        List<Estudiante> lista = this.estudianteService.buscarPorGenero(genero);
-        return lista;
-    }
+	// PATCH
+	@PatchMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Estudiante> actualizarParcial(@RequestBody Estudiante e, @PathVariable Integer id) {
+		e.setId(id);
+		Estudiante e2 = this.estudianteService.buscar(e.getId());
+		if (e.getNombre() != null) {
+			e2.setNombre(e.getNombre());
+		}
+		if (e.getApellido() != null) {
+			e2.setApellido(e.getApellido());
+		}
+		if (e.getFecha() != null) {
+			e2.setFecha(e.getFecha());
+		}
+		this.estudianteService.actualizar(e2);
 
-    // GET mixto
-    @GetMapping(path = "/mixto/{id}")
-    public Estudiante buscarMixto(@PathVariable Integer id) {
-        return this.estudianteService.buscar(id);
-    }
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_239", "Estudiante actualizado parcialmente");
+
+		return ResponseEntity.status(239).headers(cabeceras).body(e2);
+	}
+
+	// DELETE
+	@DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> borrar(@PathVariable Integer id) {
+		this.estudianteService.borrar(id);
+
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_240", "Estudiante borrado exitosamente");
+
+		return ResponseEntity.status(240).headers(cabeceras).body("Borrada exitosamente");
+	}
+
+	// GET by ID
+	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Estudiante> buscarPorId(@PathVariable Integer id) {
+		Estudiante estudiante = this.estudianteService.buscar(id);
+
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("mensaje_236", "Corresponde a la consulta de un recurso");
+		cabeceras.add("valor", "El que busca encuentra");
+
+		return ResponseEntity.status(236).headers(cabeceras).body(estudiante);
+	}
+
+	// GET by genero
+	@GetMapping(path = "/genero", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Estudiante> buscarPorGenero(@RequestParam String genero) {
+		List<Estudiante> lista = this.estudianteService.buscarPorGenero(genero);
+		return lista;
+	}
+
+	// GET mixto
+	@GetMapping(path = "/mixto/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Estudiante buscarMixto(@PathVariable Integer id) {
+		return this.estudianteService.buscar(id);
+	}
+
+	// http://localhost:8082/API/v1.0/Matricula/estudiantes/texto/plano
+	@GetMapping(path = "/texto/plano")
+	public String prueba() {
+		String prueba = "texto de prueba";
+		return prueba;
+	}
 
 }
