@@ -26,7 +26,7 @@ public class MateriaController {
 	@Autowired
 	private IMateriaService materiaService;
 
-	@PostMapping
+	@PostMapping(produces = "application/xml", consumes = "application/json")
 	public ResponseEntity<Materia> agregar(@RequestBody Materia materia) {
 		this.materiaService.agregar(materia);
 
@@ -36,7 +36,7 @@ public class MateriaController {
 		return ResponseEntity.status(201).headers(cabeceras).body(materia);
 	}
 
-	@PutMapping(path = "/{id}")
+	@PutMapping(path = "/{id}", produces = "application/json", consumes = "application/json")
 	public ResponseEntity<Materia> modificar(@RequestBody Materia materia, @PathVariable Integer id) {
 		materia.setId(id);
 		this.materiaService.modificar(materia);
@@ -47,7 +47,7 @@ public class MateriaController {
 		return ResponseEntity.status(238).headers(cabeceras).body(materia);
 	}
 
-	@DeleteMapping(path = "/{id}")
+	@DeleteMapping(path = "/{id}", produces = "application/json")
 	public ResponseEntity<String> borrar(@PathVariable Integer id) {
 		this.materiaService.borrar(id);
 
@@ -57,7 +57,7 @@ public class MateriaController {
 		return ResponseEntity.status(240).headers(cabeceras).body("Borrada exitosamente");
 	}
 
-	@GetMapping(path = "/{id}")
+	@GetMapping(path = "/{id}", produces = "application/json")
 	public ResponseEntity<Materia> buscar(@PathVariable Integer id) {
 		Materia materia = this.materiaService.buscar(id);
 
@@ -67,18 +67,18 @@ public class MateriaController {
 		return ResponseEntity.status(236).headers(cabeceras).body(materia);
 	}
 
-	@GetMapping(path = "/credito")
+	@GetMapping(path = "/credito", produces = "application/json")
 	public List<Materia> buscarPorCredito(@RequestParam Integer credito) {
 		List<Materia> lista = this.materiaService.buscarPorCredito(credito);
 		return lista;
 	}
 
-	@GetMapping(path = "/mixto/{id}")
+	@GetMapping(path = "/mixto/{id}", produces = "application/json")
 	public Materia buscarMixto(@PathVariable Integer id) {
 		return this.materiaService.buscar(id);
 	}
 
-	@PatchMapping(path = "/{id}")
+	@PatchMapping(path = "/{id}", produces = "application/json", consumes = "application/json")
 	public ResponseEntity<Materia> actualizarParcial(@RequestBody Materia m, @PathVariable Integer id) {
 		m.setId(id);
 		Materia materia = this.materiaService.buscar(m.getId());
