@@ -1,17 +1,22 @@
 package com.edu.uce.pw.api.repository.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "estudiante")
+@JsonIgnoreProperties(value = "materias")
 public class Estudiante {
 
 	@Id
@@ -31,7 +36,10 @@ public class Estudiante {
 
 	@Column(name = "estu_genero")
 	private String genero;
-	
+
+	@OneToMany(mappedBy = "estudiante")
+	private List<Materia> materias;
+
 	// SETTER Y GETTERS
 	public Integer getId() {
 		return id;
@@ -71,5 +79,13 @@ public class Estudiante {
 
 	public void setGenero(String genero) {
 		this.genero = genero;
+	}
+
+	public List<Materia> getMaterias() {
+		return materias;
+	}
+
+	public void setMaterias(List<Materia> materias) {
+		this.materias = materias;
 	}
 }

@@ -1,8 +1,12 @@
 package com.edu.uce.pw.api.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,12 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.edu.uce.pw.api.repository.model.Estudiante;
 import com.edu.uce.pw.api.service.IEstudianteService;
+import com.edu.uce.pw.api.service.IMateriaService;
+import com.edu.uce.pw.api.service.to.EstudianteTO;
+import com.edu.uce.pw.api.service.to.MateriaTO;
 
 @RestController
 @RequestMapping(path = "/estudiantes")
 public class EstudianteController {
 	@Autowired
 	private IEstudianteService estudianteService;
+
+	@Autowired
+	private IMateriaService iMateriaService;
 
 	// POST
 	@PostMapping(produces = "application/xml", consumes = "application/json")
@@ -115,4 +125,26 @@ public class EstudianteController {
 		return prueba;
 	}
 
+	// http://localhost:8082/API/v1.0/Matricula/estudiantes/hateoas/3
+	@GetMapping(path = "/hateoas/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public EstudianteTO buscarHateoas(@PathVariable Integer id) {
+		EstudianteTO estudiante = this.estudianteService.buscarPorId(id);
+		Link link = linkTo(methodOn(EstudianteController.class).buscarmateriasPorIdEstudiante(id))
+				.withRel("susMaterias");
+		estudiante.add(link);
+
+		Link link2 = linkTo(methodOn(EstudianteController.class).buscarPorId(id)).withRel("susMaterias");
+		estudiante.add(link2);
+		// ERROR, esto es una carga EAGER
+//		List<MateriaTO> lista = this.iMateriaService.buscarPorIdEstudiante(id);
+//		estudiante.setMaterias(lista);
+		return estudiante;
+
+	}
+
+	// http://localhost:8082/API/v1.0/Matricula/estudiantes/hateoas/3/materias
+	@GetMapping(path = "/{id}/materias", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<MateriaTO> buscarmateriasPorIdEstudiante(@PathVariable Integer id) {
+		return this.iMateriaService.buscarPorIdEstudiante(id);
+	}
 }

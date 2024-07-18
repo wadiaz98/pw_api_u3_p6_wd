@@ -2,16 +2,21 @@ package com.edu.uce.pw.api.repository.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "materia")
+@JsonIgnoreProperties(value = "estudiante")
 public class Materia {
 
 	@Id
@@ -29,6 +34,10 @@ public class Materia {
 	private String semestre;
 	@Column(name = "mtr_profesor")
 	private String profesor;
+
+	@ManyToOne
+	@JoinColumn(name = "mate_id_estu")
+	private Estudiante estudiante;
 
 	// SET y GET
 	public Integer getId() {
@@ -77,6 +86,14 @@ public class Materia {
 
 	public void setProfesor(String profesor) {
 		this.profesor = profesor;
+	}
+
+	public Estudiante getEstudiante() {
+		return estudiante;
+	}
+
+	public void setEstudiante(Estudiante estudiante) {
+		this.estudiante = estudiante;
 	}
 
 }
