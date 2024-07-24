@@ -7,13 +7,22 @@ import com.edu.uce.pw.api.repository.model.Estudiante;
 public interface IEstudianteRepository {
 
 	// CRUD
-	public void insertar(Estudiante e);
+	Estudiante seleccionar(Integer id);
 
-	public Estudiante seleccionar(Integer id);
+	void actualizar(Estudiante estudiante);
 
-	public void actualizar(Estudiante e);
+	void eliminar(Integer id);
 
-	public void eliminar(Integer id);
+	void insertar(Estudiante estudiante);
+
+	List<Estudiante> seleccionarPorGenero(String genero);
+
+	List<Estudiante> seleccionarTodos();
+
+	//NUEVA FUNCIONALIDAD
+	Estudiante seleccionarPorCedula(String cedula);
+	void eliminarPorCedula(String cedula);
 	
-	public List<Estudiante> buscarPorGenero(String genero);
-}
+	
+
+}	

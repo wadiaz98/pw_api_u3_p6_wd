@@ -6,16 +6,26 @@ import com.edu.uce.pw.api.repository.model.Estudiante;
 import com.edu.uce.pw.api.service.to.EstudianteTO;
 
 public interface IEstudianteService {
-	// CRUD
-	public void guardar(Estudiante e);
-
 	public Estudiante buscar(Integer id);
 
-	public void actualizar(Estudiante e);
+	public EstudianteTO buscarPorId(Integer id);
+
+	public void actualizar(Estudiante estudiante);
 
 	public void borrar(Integer id);
 
-	public List<Estudiante> buscarPorGenero(String genero);
+	public void registrar(Estudiante estudiante);
 
-	public EstudianteTO buscarPorId(Integer id);
+	List<Estudiante> seleccionarPorGenero(String genero);
+
+	List<EstudianteTO> buscarTodos();
+
+	// NUEVA Funcionalidad
+	EstudianteTO buscarPorCedula(String cedula);
+
+	void actualizarPorCedula(EstudianteTO estudianteTO);
+
+	void eliminarPorCedula(String cedula);
+	void agregar(EstudianteTO estudianteTO);
+
 }

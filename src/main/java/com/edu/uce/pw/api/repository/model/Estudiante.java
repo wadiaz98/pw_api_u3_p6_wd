@@ -3,8 +3,7 @@ package com.edu.uce.pw.api.repository.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,12 +15,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "estudiante")
-@JsonIgnoreProperties(value = "materias")
+//@JsonIgnoreProperties(value = "materias")
 public class Estudiante {
 
 	@Id
-	@SequenceGenerator(name = "seq_estu", sequenceName = "seq_estu", allocationSize = 1)
-	@GeneratedValue(generator = "seq_estu", strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "seq_estudiante", sequenceName = "seq_estudiante", allocationSize = 1)
+	@GeneratedValue(generator = "seq_estudiante", strategy = GenerationType.SEQUENCE)
 	@Column(name = "estu_id")
 	private Integer id;
 
@@ -31,19 +30,23 @@ public class Estudiante {
 	@Column(name = "estu_apellido")
 	private String apellido;
 
-	@Column(name = "estu_fecha")
-	private LocalDateTime fecha;
+	@Column(name = "estu_fechaNacimiento")
+	private LocalDateTime fechaNacimiento;
 
 	@Column(name = "estu_genero")
 	private String genero;
+	
+	@Column(name = "estu_cedula")
+	private String cedula;
 
-	@OneToMany(mappedBy = "estudiante")
+	@OneToMany(mappedBy = "estudiante",cascade = CascadeType.ALL)
 	private List<Materia> materias;
 
-	// SETTER Y GETTERS
+	// SET Y GET
+
 	public Integer getId() {
 		return id;
-	}
+	}	
 
 	public void setId(Integer id) {
 		this.id = id;
@@ -65,12 +68,12 @@ public class Estudiante {
 		this.apellido = apellido;
 	}
 
-	public LocalDateTime getFecha() {
-		return fecha;
+	public LocalDateTime getFechaNacimiento() {
+		return fechaNacimiento;
 	}
 
-	public void setFecha(LocalDateTime fecha) {
-		this.fecha = fecha;
+	public void setFechaNacimiento(LocalDateTime fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 	public String getGenero() {
@@ -88,4 +91,15 @@ public class Estudiante {
 	public void setMaterias(List<Materia> materias) {
 		this.materias = materias;
 	}
+
+	public String getCedula() {
+		return cedula;
+	}
+
+	public void setCedula(String cedula) {
+		this.cedula = cedula;
+	}
+	 
+	
+
 }
